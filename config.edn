@@ -1,0 +1,30 @@
+{
+
+ ;;:secrets #include #join [#env HOME "/.secrets.edn"]
+
+ :secrets #include #join [#env HOME "/git/cjdb" "/secrets.sample.edn"]
+
+ :pwd #profile {:dev ^:ref [:secrets :dev-pwd]
+                :test ^:ref [:secrets :test-pwd]
+                :prod ^:ref [:secrets :prod-pwd]}
+
+ :profileFromEnv #env PROFILE
+
+ :test-db-spec #hostname {"fission" {:classname "org.postgresql.Driver"
+                                     :subprotocol "postgresql"
+                                     :subname "//localhost:5432/webdev"
+                                     ;; Not needed for a non-secure local database...
+                                     :user "postgres"
+                                     :password "postgres"}
+                          "work" {:classname "org.postgresql.Driver"
+                                  :subprotocol "postgresql"
+                                  :subname "//localhost:5432/webdev"
+                                  ;; Not needed for a non-secure local database...
+                                  :user "postgres"
+                                  :password "postgres"}}
+
+ :export-schema-folder "resources/exports"
+
+ :database-spec ^:ref [:secrets :source-db-url]
+
+ }
