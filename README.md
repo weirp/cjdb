@@ -1,26 +1,31 @@
 # cjdb
 
-Spent about 3 days at my full role working on migration of data from a legacy
-application that we were replacing.
-
-I have been involved in quite a few migration projects, and one good aspect of
+I have been involved in a few migration projects, and one good aspect of
 them is that they're not necessarily tied to the tech stack being used.
-I've used tck/tk and ruby in the past, and have used clojure at work to write
-some development related tools.
+I've used tck/tk and ruby in the past for migration projects.
+Clojure is my current favourite language and I have used it over the past 3 or 4
+years at work to write some development related tools.
 
-I'm currently working on a contract, looking after an oldish java web app.
-The codebase had no unit testing and the developers don't seem to have come
+I'm currently working contracting and looking after an oldish java web app.
+The codebase had no unit test and the developers don't seem to have come
 across the concept of database transactions.
 
-I implemented 'some' unit tests including some using an in memory database.
-
+I implemented 'some' unit tests around the new work I was doing and also tried
+some tests using an in-memory database.
 Currently the schema for that database has been hand-written, and I hope to
 at least generate something here that will automate that. (It is currently a bit
 behind the real db schema)
 
 
-This is a collection of tools that might be of use in future migration,
-relational database type tools.
+Recently I spent about 3 days at my full role working on migration of data
+from a legacy application that we were replacing. Clojure was the natural choice.
+The client decided that the data involved could be entered manually instead.
+
+
+This is a collection of tools that might be of use in future migration projects.
+I am also hoping to create something that can take a copy of the database
+schema add generate a schema for the in-memory database.
+
 
 
 ## setting up mbrainz database (postgres)
