@@ -84,9 +84,9 @@ parent data, and the vector of child elements will be @ :child_data coordinates.
                             (.getColumns md catalog schema tbl nil)))))))
 
 
-(defn buildMetadata [db-spec category schema]
-  (let [tbls (getTables db-spec category schema nil)
-        cols (getColumns db-spec category schema nil)]
+(defn buildMetadata [db-spec category schema table]
+  (let [tbls (getTables db-spec category schema table)
+        cols (getColumns db-spec category schema table)]
     (merge-with conj tbls cols)))
 
 ;;(map :column_name (get-in (buildMetadata db-spec) ["contract_term"]))
@@ -107,8 +107,8 @@ parent data, and the vector of child elements will be @ :child_data coordinates.
 
 
 
-(defn extractSchemaInfo [spec catalog schema filename]
-  (let [sch (buildMetadata spec catalog schema)]
+(defn extractSchemaInfo [spec catalog schema table filename]
+  (let [sch (buildMetadata spec catalog schema table)]
     (edn/write-edn-data sch filename)))
 
 ;;(edn/write-edn-data sch "sch.edn")

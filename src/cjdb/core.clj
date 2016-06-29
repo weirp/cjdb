@@ -19,6 +19,9 @@
    ["-s" "--schema SCH" "Schema"
     :default nil
     :parse-fn #(str %)]
+   ["-t" "--table TBL" "Table"
+    :default nil
+    :parse-fn #(str %)]
 
    ["-h" "--help"]])
 
@@ -58,6 +61,7 @@
                     (db/extractSchemaInfo (:database-spec (config/config))
                                           (:catalog options)
                                           (:schema options)
+                                          (:table options)
                                           (:file options))
                     (exit 0 "done.")
                     )
