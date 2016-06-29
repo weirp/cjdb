@@ -22,6 +22,9 @@
    ["-t" "--table TBL" "Table"
     :default nil
     :parse-fn #(str %)]
+   ["-x" "--createTarget CAT.SCH.TBL" "New path for table"
+    :default nil
+    :parse-fn #(str %)]
 
    ["-h" "--help"]])
 
@@ -34,7 +37,8 @@
         options-summary
         ""
         "Actions:"
-        "   extract     extract schema info from a database"]
+        "   extract     extract schema info from a database"
+        "   create      create table"]
        (string/join \newline)))
 
 (defn error-msg [errors]
@@ -65,6 +69,8 @@
                                           (:file options))
                     (exit 0 "done.")
                     )
+      "create" (do (pprint (str "create from " (:file options)))
+                   (exit 0 "done."))
       (exit 1 (usage summary)))))
 
 ;;(:database-spec (config/config))
