@@ -13,6 +13,13 @@
    ["-f" "--file FILE" "Filename"
     :default "out.edn"
     :parse-fn #(str %)]
+   ["-c" "--catalog CAT" "Catalog"
+    :default nil
+    :parse-fn #(str %)]
+   ["-s" "--schema SCH" "Schema"
+    :default nil
+    :parse-fn #(str %)]
+
    ["-h" "--help"]])
 
 (defn usage [options-summary]
@@ -48,7 +55,10 @@
                  (exit 0 "done."))
       "extract" (do (pprint (str "extract to " (:file options)))
                     (pprint (str "db spec = " (:database-spec (config/config))))
-                    (db/extractSchemaInfo (:database-spec (config/config)) (:file options))
+                    (db/extractSchemaInfo (:database-spec (config/config))
+                                          (:catalog options)
+                                          (:schema options)
+                                          (:file options))
                     (exit 0 "done.")
                     )
       (exit 1 (usage summary)))))
