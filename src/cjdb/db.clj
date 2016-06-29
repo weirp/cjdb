@@ -99,7 +99,7 @@ parent data, and the vector of child elements will be @ :child_data coordinates.
 
 ;;(jdbc/create-table-ddl :cmx (buildTable (buildMetadata db-spec) "contract_managementx"))
 
-(defn build-copy-of-tbl-example []
+(defn build-copy-of-tbl-example [db-spec]
   (jdbc/db-do-commands db-spec
                        (jdbc/create-table-ddl
                         :cmx
