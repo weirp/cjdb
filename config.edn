@@ -1,12 +1,14 @@
 {
 
- :secrets #include #join [#env HOME "/.secrets.edn"]
+ :secrets #include #profile {:prod #join [#env HOME "/.secrets.edn"]
+                             :default #join [#env HOME "/git/cjdb" "/secrets.sample.edn"]}
 
  ;;:secrets #include #join [#env HOME "/git/cjdb" "/secrets.sample.edn"]
 
  :pwd #profile {:dev ^:ref [:secrets :dev-pwd]
                 :test ^:ref [:secrets :test-pwd]
-                :prod ^:ref [:secrets :prod-pwd]}
+                :prod ^:ref [:secrets :prod-pwd]
+                :default "nah!"}
 
  :profileFromEnv #env PROFILE
 

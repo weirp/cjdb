@@ -8,7 +8,7 @@
 
 (def cli-options
   [
-   ["-p" "--profile" "Profile"
+   ["-p" "--profile PROFILE" "Profile"
     :default :dev]
    ["-f" "--file FILE" "Filename"
     :default "out.edn"
@@ -54,6 +54,7 @@
   [& args]
   (let [{:keys [options arguments errors summary] :as allopts} (parse-opts args cli-options)]
     (pprint allopts)
+    (pprint (config/config (keyword (:profile options))))
     (cond
       (:help options) (exit 0 (usage summary))
       errors (exit 1 (error-msg errors)))
