@@ -9,7 +9,7 @@
                  [org.clojure/tools.cli "0.3.5"]
                  [org.clojure/java.jdbc "0.6.0-rc1"]
                  [com.rpl/specter "0.10.0"]
-                 [aero "1.0.0-beta3"]
+                 [aero "1.0.0-beta5"]
                  [org.clojure/tools.cli "0.3.5"]
                  [clj-time "0.8.0"]
                  [semantic-csv "0.1.0"]]

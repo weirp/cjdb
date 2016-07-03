@@ -37,6 +37,26 @@ will come back to this.
 
 Nah, will use the virtualbox vm.....
 
+have downloaded the mbrainz virtualbox appliance and installed.
+Has port forwarding setup for 22 f(for ssh) and 5000 (for the web app).
+Will check the postgres config (that it allows non local host access) and set up
+port forwarding to 5432.
+
+Can ssh into box using
+ssh -p 2222 vm@localhost
+
+
+Modified the following:
+set port fwd host:5499 -> 5432
+postgresql.conf
+  -> add listen_address = '*'
+pg_hba.conf
+    host all all 10.0.2.0/16 trust
+
+
+
+
+
 ## Installation
 
 Download from http://example.com/FIXME.
