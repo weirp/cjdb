@@ -14,6 +14,8 @@
 
  :export-schema-folder "resources/exports"
 
- :database-spec ^:ref [:secrets :source-db-url]
+ :source-database ^:ref [:secrets :source-db-url]
+
+ :target-database ^:ref [:secrets :target-db-url]
 
  }

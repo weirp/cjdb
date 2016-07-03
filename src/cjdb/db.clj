@@ -86,8 +86,9 @@ parent data, and the vector of child elements will be @ :child_data coordinates.
 
 (defn buildMetadata [db-spec category schema table]
   (let [tbls (getTables db-spec category schema table)
-        cols (getColumns db-spec category schema table)]
-    (merge-with conj tbls cols)))
+        cols (getColumns db-spec category schema table)
+        colsForTables (filter #(contains? tbls (key %) ) cols)]
+    (merge-with conj tbls colsForTables)))
 
 ;;(map :column_name (get-in (buildMetadata db-spec) ["contract_term"]))
 

@@ -3,7 +3,8 @@
             [clojure.pprint :refer [pprint]]
             [clojure.tools.cli :refer [parse-opts]]
             [cjdb.db :as db]
-            [cjdb.config :as config])
+            [cjdb.config :as config]
+            [cjdb.edn :as edn])
   (:gen-class))
 
 (def cli-options
@@ -38,7 +39,8 @@
         ""
         "Actions:"
         "   extract     extract schema info from a database"
-        "   create      create table"]
+        "   create      create table"
+        "   printTables print tables from file"]
        (string/join \newline)))
 
 (defn error-msg [errors]
@@ -48,7 +50,7 @@
 (defn exit [status msg]
   (println msg)
   (System/exit status))
-
+<
 (defn -main
   ""
   [& args]
@@ -62,16 +64,35 @@
       "blah" (do (pprint "blah")
                  (exit 0 "done."))
       "extract" (do (pprint (str "extract to " (:file options)))
-                    (pprint (str "db spec = " (:database-spec (config/config))))
-                    (db/extractSchemaInfo (:database-spec (config/config))
+                    (pprint (str "source db = " (:source-database (config/config))))
+                    (db/extractSchemaInfo (:source-database (config/config))
                                           (:catalog options)
                                           (:schema options)
                                           (:table options)
                                           (:file options))
                     (exit 0 "done.")
                     )
-      "create" (do (pprint (str "create from " (:file options)))
+      "create" (do (pprint (str "create from " (:file options) " to db "
+                                (:target-database options)))
                    (exit 0 "done."))
+      "printTables" (do (let [data (edn/read-edn-data (:file options))]
+                          (pprint (type (into [] data)))
+                          (pprint (map (juxt :table_type :table_cat :table_schem :table_name)
+                                       (vals data)))
+                          ;;(pprint (vals data))
+                          )
+                      (exit 0 "done."))
       (exit 1 (usage summary)))))
 
-;;(:database-spec (config/config))
+;;(def db-spec (:source-database (config/config {:profile :dev})))
+;;(def data (edn/read-edn-data "out.edn"))
+;;(keys  (nth (vals data) 190))
+
+;;(def t (db/getTables db-spec nil "musicbrainz" nil))
+;;(def c (db/getColumns db-spec nil "musicbrainz" nil))
+;;(count (keys c))
+;;(count (keys t))
+
+;;(filter #(contains? t (key %) ) c)
+
+;;(filter #(contains? [1 2 3] %) [2 4 5 1 6 3 2])
