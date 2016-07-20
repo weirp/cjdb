@@ -4,7 +4,8 @@
             [clojure.tools.cli :refer [parse-opts]]
             [cjdb.db :as db]
             [cjdb.config :as config]
-            [cjdb.edn :as edn])
+            [cjdb.edn :as edn]
+            [cjdb.csv :as csv])
   (:gen-class))
 
 (def cli-options
@@ -26,6 +27,10 @@
    ["-x" "--createTarget CAT.SCH.TBL" "New path for table"
     :default nil
     :parse-fn #(str %)]
+   ["-i" "--iisLog FILE" "iis log file"
+    :default nil
+    :parse-fn #(str %)]
+
 
    ["-h" "--help"]])
 
@@ -40,7 +45,9 @@
         "Actions:"
         "   extract     extract schema info from a database"
         "   create      create table"
-        "   printTables print tables from file"]
+        "   printTables print tables from file"
+        "   iislog      process IIS logs"
+        ]
        (string/join \newline)))
 
 (defn error-msg [errors]
@@ -81,7 +88,10 @@
                                        (vals data)))
                           ;;(pprint (vals data))
                           )
-                      (exit 0 "done."))
+                        (exit 0 "done."))
+      "iislog" (do (let [data (csv/prep-iis-log (:iisLog options))]
+                     (pprint (first data)))
+                   (exit 0 "done."))
       (exit 1 (usage summary)))))
 
 ;;(def db-spec (:source-database (config/config {:profile :dev})))
