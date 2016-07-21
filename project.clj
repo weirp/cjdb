@@ -12,7 +12,8 @@
                  [aero "1.0.0-beta5"]
                  [org.clojure/tools.cli "0.3.5"]
                  [clj-time "0.8.0"]
-                 [semantic-csv "0.1.0"]]
+                 [semantic-csv "0.1.0"]
+                 [org.clojure/data.csv "0.1.3"]]
   :main ^:skip-aot cjdb.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}})

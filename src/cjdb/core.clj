@@ -89,8 +89,7 @@
                           ;;(pprint (vals data))
                           )
                         (exit 0 "done."))
-      "iislog" (do (let [data (csv/prep-iis-log (:iisLog options))]
-                     (pprint (first data)))
+      "iislog" (do (let [data (csv/output-iis-freq-data (:iisLog options) "out.csv")])
                    (exit 0 "done."))
       (exit 1 (usage summary)))))
 

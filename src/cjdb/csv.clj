@@ -3,7 +3,8 @@
             [clojure.java.io :as io]
             [clojure-csv.core :as csv]
             [semantic-csv.core :as sc :refer :all]
-            [clojure.string :as string]))
+            [clojure.string :as string]
+            [clojure.data.csv :as cd]))
 
 (defn load-data [filename delim]
   (with-open [in-file (io/reader filename)]
@@ -22,6 +23,24 @@
                      (Integer/parseInt (string/join (string/split (:time m) #":")))))
          raw-data)))
 
+(defn do-freq-analysis [filename]
+  (reduce
+   (fn [m x]
+     (update-in m [x]
+                (fn [curr]
+                  (if (nil? curr)
+                    1
+                    (inc curr))))) {}
+   (for [[x y] (map (juxt :time_millis :time-taken)
+                    (prep-iis-log filename) )
+         i (range x (+ x (Integer/parseInt y)))]
+     i)))
+
+(defn output-iis-freq-data [filename outfile]
+  (let [freq-analysis (do-freq-analysis filename)]
+    (with-open [out-file (io/writer outfile)]
+      (cd/write-csv out-file freq-analysis))))
+
 ;;(prep-iis-log "resources/u_ex160719.log")
 ;;(first (load-data "resources/u_ex160719.log" \tab))
 ;;(first (load-data "resources/u_ex160719.log" \space))
@@ -30,16 +49,51 @@
 
 ;;(map (fn [m] (assoc-in m [:time_millis] (Integer/parseInt (string/join (string/split (:time m) #":"))))) (take 2 (load-data "resources/u_ex160719.log" \space)) )
 
-(reduce (fn [m x]
-          (let [from (:time-millis x)
-                to (+ from (:time-taken x))]
-            (update-in m ))))
-(take 2 (prep-iis-log "resources/u_ex160719.log"))
+;;(reduce (fn [m x]
+;;          (let [from (:time-millis x)
+;;                to (+ from (:time-taken x))]
+;;            (update-in m ))))
+;;
 
-(range 10 78 4)
+;;(range 10 78 4)
 
-(def m {})
-(update-in m [1] (fn [x] ((fnil inc 0) x)))
+;;(def m {})
+;;(update-in m [1] (fn [x] ((fnil inc 0) x)))
 
-(map (fn [a] (update-in m [a] (fn [x] ((fnil inc 0) x)))) [1 2 4 5 1 6 1])
-(fnil m 0)
+;;(map (fn [a] (update-in m [a] (fn [x] ((fnil inc 0) x)))) [1 2 4 5 1 6 1])
+;;(fnil m 0)
+
+
+;;(sort (for [[x y] [[12 5] [15 12] [20 5]]
+;;            i (range x (+ x y))]
+;;        i))
+
+;;(sort (for [[x y] (map (juxt :time_millis :time-taken) (take 20 (prep-iis-log "resources/u_ex160719.log") ))
+;;i (range x (+ x (Integer/parseInt y)))
+;;            ]
+;;        i))
+
+
+;;(map (juxt :time_millis :time-taken) (take 2 (prep-iis-log "resources/u_ex160719.log") ))
+
+
+;;(reduce
+;; (fn [m x]
+;;   (update-in m [x]
+;;              (fn [curr]
+ ;;               (if (nil? curr)
+;;                  1
+;;                  (inc curr))))) {} [1 2 3 3 3 4 4 5 6])
+
+
+;;(reduce
+;; (fn [m x]
+;;   (update-in m [x]
+;;              (fn [curr]
+;;                (if (nil? curr)
+;;                  1
+;;                  (inc curr))))) {}
+;; (for [[x y] (map (juxt :time_millis :time-taken)
+;;                  (take 2000 (prep-iis-log "resources/u_ex160719.log") ))
+;;       i (range x (+ x (Integer/parseInt y)))]
+;;   i))
