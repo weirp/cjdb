@@ -25,16 +25,7 @@
                           millis)))
          raw-data)))
 
-;;(map (fn [m]
-;;       (assoc-in m [:time_millis]
-;;                 (let [[h m s] (map #(Integer/parseInt %) (string/split (:time m) #":"))
-;;                         millis (* (+ (* (+ (* h 60) m) 60) s) 1000)]
-;;                   millis)
-
-;;                 ))
-;;     (take 2 (load-data "resources/u_ex160719.log" \space)) )
-
-(defn do-freq-analysis [filename]
+(defn do-freq-analysis [filename linger]
   (reduce
    (fn [m x]
      (update-in m [x]
@@ -44,13 +35,13 @@
                     (inc curr))))) {}
    (for [[x y] (map (juxt :time_millis :time-taken)
                     (prep-iis-log filename) )
-         i (range x (+ x -1 (Integer/parseInt y)))]
+         i (range x (+ x -1 (Integer/parseInt y) linger))]
      i)))
 
-(defn output-iis-freq-data [filename outfile]
-  (let [freq-analysis (do-freq-analysis filename)]
+(defn output-iis-freq-data [filename outfile linger]
+  (let [freq-analysis (do-freq-analysis filename linger)]
     (with-open [out-file (io/writer outfile)]
-      (cd/write-csv out-file freq-analysis))))
+      (cd/write-csv out-file freq-analysis :delimiter \tab))))
 
 ;;(prep-iis-log "resources/u_ex160719.log")
 ;;(first (load-data "resources/u_ex160719.log" \tab))

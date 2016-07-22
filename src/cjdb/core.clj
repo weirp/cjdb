@@ -10,28 +10,14 @@
 
 (def cli-options
   [
-   ["-p" "--profile PROFILE" "Profile"
-    :default :dev]
-   ["-f" "--file FILE" "Filename"
-    :default "out.edn"
-    :parse-fn #(str %)]
-   ["-c" "--catalog CAT" "Catalog"
-    :default nil
-    :parse-fn #(str %)]
-   ["-s" "--schema SCH" "Schema"
-    :default nil
-    :parse-fn #(str %)]
-   ["-t" "--table TBL" "Table"
-    :default nil
-    :parse-fn #(str %)]
-   ["-x" "--createTarget CAT.SCH.TBL" "New path for table"
-    :default nil
-    :parse-fn #(str %)]
-   ["-i" "--iisLog FILE" "iis log file"
-    :default nil
-    :parse-fn #(str %)]
-
-
+   ["-p" "--profile PROFILE" "Profile" :default :dev]
+   ["-f" "--file FILE" "Filename" :default "out.edn" :parse-fn #(str %)]
+   ["-c" "--catalog CAT" "Catalog" :default nil :parse-fn #(str %)]
+   ["-s" "--schema SCH" "Schema" :default nil :parse-fn #(str %)]
+   ["-t" "--table TBL" "Table" :default nil :parse-fn #(str %)]
+   ["-x" "--createTarget CAT.SCH.TBL" "New path for table" :default nil :parse-fn #(str %)]
+   ["-i" "--iisLog FILE" "iis log file" :default nil :parse-fn #(str %)]
+   ["-l" "--linger N" "linger setting for socket connections" :default 0 :parse-fn #(Integer/parseInt %)]
    ["-h" "--help"]])
 
 (defn usage [options-summary]
@@ -89,7 +75,7 @@
                           ;;(pprint (vals data))
                           )
                         (exit 0 "done."))
-      "iislog" (do (let [data (csv/output-iis-freq-data (:iisLog options) "out.csv")])
+      "iislog" (do (let [data (csv/output-iis-freq-data (:iisLog options) "out.csv" (:linger options))])
                    (exit 0 "done."))
       (exit 1 (usage summary)))))
 
